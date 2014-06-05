@@ -35,8 +35,11 @@ class BooksController < ApplicationController
   end
 
   def from_angular
-    unless request.headers["X-angular"] 
+    if request.format.symbol == :html
       render "layouts/application"
     end
+    # unless request.headers["X-angular"] 
+    #   render "layouts/application"
+    # end
   end
 end
