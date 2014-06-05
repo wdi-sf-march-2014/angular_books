@@ -1,6 +1,9 @@
 class BooksController < ApplicationController
   before_action :set_book, only: [:show, :update, :destroy]
-  respond_to :json
+  before_action :from_angular
+  respond_to :json, :html
+
+  layout :false
 
   def index
     respond_with Book.all
@@ -31,4 +34,9 @@ class BooksController < ApplicationController
     params.require(:book).permit(:title, :author, :description, :isbn)
   end
 
+  def from_angular
+    unless request.headers["X-angular"] 
+      render "layouts/application"
+    end
+  end
 end

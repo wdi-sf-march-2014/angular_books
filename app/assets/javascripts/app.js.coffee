@@ -1,8 +1,23 @@
 # Define App
-BookApp = angular.module("BookApp", [])
+BookApp = angular.module("BookApp", ["ngRoute"])
+
+
+BookApp.config(["$routeProvider", "$locationProvider", ($routeProvider, $locationProvider)->
+  $routeProvider
+  .when("/books", {
+    templateUrl: "/books_templates/index",
+    controller: "BooksCtrl"
+  }).when("/books/:id", {
+    templateUrl: "/books_templates/show",
+    controller: "BooksDetailCtrl"
+  }).otherwise({
+    redirectTo: '/books'
+  })
+  $locationProvider.html5Mode(true);
+])
 
 # Define Controller
-BookApp.controller("BooksCtrl", ["$scope", "$http", ($scope, $http) ->
+BookApp.controller("BooksCtrl", ["$scope", "$http", "$routeParams", ($scope, $http, $routeParams) ->
 
   $scope.books = []
 
@@ -24,7 +39,17 @@ BookApp.controller("BooksCtrl", ["$scope", "$http", ($scope, $http) ->
 
 ])
 
+BookApp.controller("BooksDetailCtrl", ["$scope", "$http", "$routeParams", ($scope, $http, $routeParams) ->
+
+  $scope.id = $routeParams.id
+
+  $http.get("/books/" + $scope.id+ ".json").success (data)->
+    $scope.book = data
+])
+
 # Define Config
 BookApp.config(["$httpProvider", ($httpProvider)->
   $httpProvider.defaults.headers.common['X-CSRF-Token'] = $('meta[name=csrf-token]').attr('content')
+
+  $httpProvider.defaults.headers.common['X-angular'] = "true"
 ])
