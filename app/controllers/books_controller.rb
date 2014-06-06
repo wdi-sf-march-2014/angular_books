@@ -1,6 +1,12 @@
 class BooksController < ApplicationController
   before_action :set_book, only: [:show, :update, :destroy]
-  respond_to :json
+  # create a before_action that just returns the template
+  #   without the layout
+  before_action :render_main_layout_if_format_html
+
+  respond_to :json, :html
+
+  layout :false
 
   def index
     respond_with Book.all
@@ -29,6 +35,13 @@ class BooksController < ApplicationController
 
   def book_params
     params.require(:book).permit(:title, :author, :description, :isbn)
+  end
+
+  def render_main_layout_if_format_html
+    # check the request format
+    if request.format.symbol == :html
+      render "layouts/application"
+    end
   end
 
 end

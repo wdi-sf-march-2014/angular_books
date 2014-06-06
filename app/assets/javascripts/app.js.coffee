@@ -1,30 +1,64 @@
-# Define App
-BookApp = angular.module("BookApp", [])
+# # Define App
+# BookApp = angular.module("BookApp", [
+#   "ngRoute",
+#   "ngResource"
+# ])
 
-# Define Controller
-BookApp.controller("BooksCtrl", ["$scope", "$http", ($scope, $http) ->
+# # Setup the angular router during the
+# #   config state of the application
+# BookApp.config(["$routeProvider", "$locationProvider", ($routeProvider, $locationProvider)->
+#   $routeProvider
+#     .when("/books", {
+#       templateUrl: "/books_templates/index",
+#       controller: "BooksCtrl"
+#     })
+#     .when("/books/:id", {
+#       templateUrl: "/books_templates/show",
+#       controller: "BookDetailsCtrl"
+#     })
+#     .otherwise({
+#       redirectTo: "/books"
+#     })
+#   $locationProvider.html5Mode(true)
+# ])
 
-  $scope.books = []
+# BookApp.factory("Books", ["$resource", ($resource)->
+#   $resource("/books/:id.json", {id: "@id"}, {update: {method: "PUT"}})
+# ])
 
-  $http.get("/books.json").success (data)->
-    $scope.books = data
+# # Need a BookDetailsCtrl
+# BookApp.controller("BookDetailsCtrl", ["$scope", "$http", "$routeParams", ($scope, $http, $routeParams)->
+#   $scope.book_id = $routeParams.id
 
-  $scope.addBook = ->
-    console.log $scope.newBook
-    $http.post("/books.json", $scope.newBook).success (data)->
-      console.log "BOOK SAVED!"
-      $scope.newBook = {}
-      $scope.books.push(data)
+#   $http.get("/books/#{$scope.book_id}.json")
+#     .success((data)-> $scope.book = data)
+# ])
 
-  $scope.deleteBook = ->
-    console.log @book
-    $http.delete("/books/#{@book.id}.json").success (data)=>
-      console.log "book deleted"
-      $scope.books.splice(@$index,1)
+# # Define Controller
+# BookApp.controller("BooksCtrl", ["$scope", "$http", "Books", ($scope, $http, Books) ->
 
-])
+#   $scope.books = []
 
-# Define Config
-BookApp.config(["$httpProvider", ($httpProvider)->
-  $httpProvider.defaults.headers.common['X-CSRF-Token'] = $('meta[name=csrf-token]').attr('content')
-])
+#   Books.query (data)-> 
+#     console.log("RETRIEVED ALL BOOKS!!!")
+#     $scope.books = data
+
+#   $scope.addBook = ->
+#     console.log $scope.newBook
+#     $http.post("/books.json", $scope.newBook).success (data)->
+#       console.log "BOOK SAVED!"
+#       $scope.newBook = {}
+#       $scope.books.push(data)
+
+#   $scope.deleteBook = ->
+#     console.log @book
+#     $http.delete("/books/#{@book.id}.json").success (data)=>
+#       console.log "book deleted"
+#       $scope.books.splice(@$index,1)
+
+# ])
+
+# # Define Config
+# BookApp.config(["$httpProvider", ($httpProvider)->
+#   $httpProvider.defaults.headers.common['X-CSRF-Token'] = $('meta[name=csrf-token]').attr('content')
+# ])

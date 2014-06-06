@@ -7,8 +7,11 @@
   <%= csrf_meta_tags %>
 </head>
 <body ng-app="BookApp">
-
-<%= yield %>
+ {{1+2}}
+<!-- We don't need the yield anymore -->
+<!-- Ng-view is like angular's yield -->
+  <div ng-view>
+  </div>
 
 </body>
 </html>
