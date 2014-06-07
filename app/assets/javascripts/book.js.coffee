@@ -3,7 +3,8 @@ BookApp = angular.module("BookApp", [
   "ngResource",
   "BookRouter",
   "BookControllers",
-  "BookServices"
+  "BookServices",
+  "BookDirectives"
 ])
 BookApp.config(["$httpProvider", ($httpProvider)->
   $httpProvider.defaults.headers.common['X-CSRF-Token'] = $('meta[name=csrf-token]').attr('content')
