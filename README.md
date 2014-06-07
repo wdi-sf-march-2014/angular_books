@@ -4,7 +4,7 @@
 | Objectives |
 | :-----  |
 | Utilize a template for a custom directive |
-| Utilize a custom scope for a directive |
+| Utilize a scope for a directive |
 | Manipulate DOM from directive |
 
 
